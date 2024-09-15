@@ -72,11 +72,12 @@ namespace Spaceship_Demo
         // Helper Methods
 
         /// <summary>
-        /// Move every particle in the trail based on the spaceship position
+        /// Move every particle in the trail based on the spaceship position, 
+        /// as well as rotate every particle
         /// </summary>
         private void UpdateParticles()
         {
-
+            
         }
 
         /// <summary>

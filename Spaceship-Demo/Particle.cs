@@ -26,6 +26,18 @@ namespace Spaceship_Demo
             set { pos = value; }
         }
 
+        public float X
+        {
+            get { return pos.X; }
+            set { pos.X = value; }
+        }
+
+        public float Y
+        {
+            get { return pos.Y; }
+            set { pos.Y = value; }
+        }
+
         // Constructors
 
         /// <summary>
