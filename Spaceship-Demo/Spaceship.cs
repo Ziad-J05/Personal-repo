@@ -21,7 +21,7 @@ namespace Spaceship_Demo
         private Texture2D particleTexture;
         private List<Particle> particles;
         private int trailLength;
-        private int particleCount;
+        private int particleCount; // TODO: this isnt necessary since it isnt used after initialization
 
         /// <summary>
         /// Position of the spaceship in 2D space
@@ -58,7 +58,7 @@ namespace Spaceship_Demo
         /// <param name="kb"></param>
         public void Move(KeyboardState kb)
         {
-            UpdateParticles();
+            UpdateParticles(particles.Count);
         }
 
         /// <summary>
@@ -71,13 +71,21 @@ namespace Spaceship_Demo
 
         // Helper Methods
 
-        /// <summary>
-        /// Move every particle in the trail based on the spaceship position, 
-        /// as well as rotate every particle
-        /// </summary>
-        private void UpdateParticles()
+        
+        private Vector2 UpdateParticles(int particleIndex)
         {
-            
+            // recursive case: assign position of particle to the next one in line
+            if (particleIndex > 0)
+            {
+                return UpdateParticles(particleIndex - 1);
+            }
+            // base case: assign position of particle to ship position
+            else
+            {
+                return pos;
+            }
+            // so it compiles
+            return Vector2.One;
         }
 
         /// <summary>
