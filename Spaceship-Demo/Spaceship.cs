@@ -54,15 +54,43 @@ namespace Spaceship_Demo
         /// <param name="kb"></param>
         public void Move(KeyboardState kb)
         {
+            // update ship position
+            if (kb.IsKeyDown(Keys.W))
+            {
+                pos.Y -= 5;
+            }
+            if (kb.IsKeyDown(Keys.S))
+            {
+                pos.Y += 5;
+            }
+
+            // update trail position
             UpdateParticles();
         }
 
         /// <summary>
         /// Draw the spaceship and its trail
         /// </summary>
-        public void Draw()
+        public void Draw(SpriteBatch sb)
         {
+            // draw ship
+            sb.Draw(shipTexture, pos, Color.White);
 
+            // draw trail
+            for(int i = 0; i < particles.Count; i++)
+            {
+                Particle particle = particles[i];
+                sb.Draw(
+                    particleTexture,
+                    new Rectangle((int)particle.X, (int)particle.Y, particleTexture.Width, particleTexture.Height),
+                    null,
+                    Color.White,
+                    particle.Rot,
+                    new Vector2 (particleTexture.Width/2, particleTexture.Height/2),
+                    SpriteEffects.None,
+                    (i/particles.Count)
+                    );
+            }
         }
 
         // Helper Methods
@@ -87,7 +115,7 @@ namespace Spaceship_Demo
             // rotate all particles
             foreach (Particle particle in particles)
             {
-                particle.UpdateRot(3f);
+                particle.UpdateRot(MathF.PI/8);
             }
         }
 
@@ -107,7 +135,7 @@ namespace Spaceship_Demo
                 // define position and rotation based on index
                 particles[i] = new Particle( 
                     ((1 - particleCount) * initial) + (particleCount * final), // R = (1-t)P + tQ
-                    180 * (i+1)/particleCount // 180 * n/t
+                    MathF.PI * (i+1)/particleCount // pi radians * n/t
                     );
             }
         }

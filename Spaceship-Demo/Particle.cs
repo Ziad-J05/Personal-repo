@@ -38,6 +38,8 @@ namespace Spaceship_Demo
             set { pos.Y = value; }
         }
 
+        public float Rot { get { return rot; } }
+
         // Constructors
 
         /// <summary>
