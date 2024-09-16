@@ -58,7 +58,7 @@ namespace Spaceship_Demo
         /// <param name="kb"></param>
         public void Move(KeyboardState kb)
         {
-            UpdateParticles(particles.Count);
+            UpdateParticles();
         }
 
         /// <summary>
@@ -71,22 +71,31 @@ namespace Spaceship_Demo
 
         // Helper Methods
 
-        
-        private Vector2 UpdateParticles(int particleIndex)
+        /// <summary>
+        /// Updates the posittion and rotation of every particle in the trail
+        /// </summary>
+        private void UpdateParticles()
         {
-            // recursive case: assign position of particle to the next one in line
-            if (particleIndex > 0)
-            {
-                return UpdateParticles(particleIndex - 1);
+            // assign y-value of each particle to the one in front of it
+            for (int i = particles.Count - 1; i >= 0; i--) 
+            { 
+                Particle particle = particles[i];
+                Particle next = particles[i + 1];
+
+                particle.Y = next.Y;
             }
-            // base case: assign position of particle to ship position
-            else
+
+            // assign y-value of first particle to ship's y-value
+            particles[0].Y = pos.Y;
+
+            // rotate all particles
+            foreach (Particle particle in particles)
             {
-                return pos;
+                particle.UpdateRot(3f);
             }
-            // so it compiles
-            return Vector2.One;
         }
+
+
 
         /// <summary>
         /// Instantiate every particle in the ship's trail and create a list to store them in
