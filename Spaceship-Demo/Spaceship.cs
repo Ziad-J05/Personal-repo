@@ -20,8 +20,6 @@ namespace Spaceship_Demo
         private Texture2D shipTexture;
         private Texture2D particleTexture;
         private List<Particle> particles;
-        private int trailLength;
-        private int particleCount; // TODO: this isnt necessary since it isnt used after initialization
 
         /// <summary>
         /// Position of the spaceship in 2D space
@@ -45,9 +43,7 @@ namespace Spaceship_Demo
             this.gravity = gravity;
             this.shipTexture = shipTexture;
             this.particleTexture = particleTexture;
-            this.trailLength = trailLength;
-            this.particleCount = particleCount;
-            InitializeTrail();
+            InitializeTrail(particleCount, trailLength);
         }
 
         // Methods
@@ -95,13 +91,25 @@ namespace Spaceship_Demo
             }
         }
 
-
-
         /// <summary>
         /// Instantiate every particle in the ship's trail and create a list to store them in
         /// </summary>
-        private void InitializeTrail() 
+        private void InitializeTrail(int particleCount, int trailLength) 
         { 
+            // define start and end points
+            Vector2 initial = pos;
+            Vector2 final = pos - new Vector2(trailLength, 0);
+
+            // create particle list and every particle in the trail
+            particles = new List<Particle>(particleCount);
+            for (int i = 0; i < particleCount; i++)
+            {
+                // define position and rotation based on index
+                particles[i] = new Particle( 
+                    ((1 - particleCount) * initial) + (particleCount * final), // R = (1-t)P + tQ
+                    180 * (i+1)/particleCount // 180 * n/t
+                    );
+            }
         }
     }
 }
