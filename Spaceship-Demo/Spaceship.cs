@@ -126,17 +126,17 @@ namespace Spaceship_Demo
         { 
             // define start and end points
             Vector2 initial = pos;
-            Vector2 final = pos - new Vector2(trailLength, 0);
+            Vector2 direction = new Vector2(-1, 0);
 
             // create particle list and every particle in the trail
             particles = new List<Particle>(particleCount);
-            for (int i = 0; i < particleCount; i++)
+            for (float i = 0f; i < particleCount; i++)
             {
                 // define position and rotation based on index
-                particles[i] = new Particle( 
-                    ((1 - particleCount) * initial) + (particleCount * final), // R = (1-t)P + tQ
+                particles.Add(new Particle( 
+                    initial + (((i+1) / (particleCount - 1)) * direction), // P + tv, where t = i/(n-1)
                     MathF.PI * (i+1)/particleCount // pi radians * n/t
-                    );
+                    ));
             }
         }
     }
