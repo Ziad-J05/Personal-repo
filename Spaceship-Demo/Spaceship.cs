@@ -16,10 +16,12 @@ namespace Spaceship_Demo
     {
         private Vector2 pos;
         private float yVelocity;
-        private float gravity;
+        private float drag;
         private Texture2D shipTexture;
         private Texture2D particleTexture;
         private List<Particle> particles;
+
+        private bool moveDir; // true is up
 
         /// <summary>
         /// Position of the spaceship in 2D space
@@ -36,13 +38,14 @@ namespace Spaceship_Demo
         /// <param name="particleTexture"></param>
         /// <param name="trailLength"></param>
         /// <param name="particleCount"></param>
-        public Spaceship(Vector2 pos, float gravity, Texture2D shipTexture, Texture2D particleTexture, int trailLength, int particleCount)
+        public Spaceship(Vector2 pos, float drag, Texture2D shipTexture, Texture2D particleTexture, int trailLength, int particleCount)
         {
             this.pos = pos;
             yVelocity = 0f;
-            this.gravity = gravity;
+            this.drag = drag;
             this.shipTexture = shipTexture;
             this.particleTexture = particleTexture;
+            moveDir = true;
             InitializeTrail(particleCount, trailLength);
         }
 
@@ -54,14 +57,36 @@ namespace Spaceship_Demo
         /// <param name="kb"></param>
         public void Move(KeyboardState kb)
         {
-            // update ship position
+            // apply drag
+            if (yVelocity > 0)
+            {
+                yVelocity -= drag;
+            }
+            else
+            {
+                yVelocity = 0f;
+            }
+
+            // reset ship velocity
             if (kb.IsKeyDown(Keys.W))
             {
-                pos.Y -= 5;
+                yVelocity = 5;
+                moveDir = true;
             }
             if (kb.IsKeyDown(Keys.S))
             {
-                pos.Y += 5;
+                yVelocity = 5;
+                moveDir = false;
+            }
+
+            // apply velocity
+            if (moveDir)
+            {
+                pos.Y -= yVelocity;
+            }
+            else
+            {
+                pos.Y += yVelocity;
             }
 
             // update trail position
@@ -84,7 +109,7 @@ namespace Spaceship_Demo
                     particleTexture,
                     new Rectangle((int)particle.X, (int)particle.Y, particleTexture.Width, particleTexture.Height),
                     null,
-                    Color.White,
+                    new Color(Color.White, (float)(particles.Count - i)/(float)particles.Count),
                     particle.Rot,
                     new Vector2 (particleTexture.Width/2, particleTexture.Height/2),
                     SpriteEffects.None,
