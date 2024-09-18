@@ -93,7 +93,7 @@ namespace Spaceship_Demo
         /// </summary>
         public void UpdateRot(float rotSpeed)
         {
-
+            rot += rotSpeed;
         }
     }
 }

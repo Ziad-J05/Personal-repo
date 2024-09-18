@@ -50,7 +50,9 @@ namespace Spaceship_Demo
                 Exit();
 
             // TODO: Add your update logic here
-
+            KeyboardState keyboardState = Keyboard.GetState();
+            ship.Move(keyboardState);
+                
             base.Update(gameTime);
         }
 

@@ -102,20 +102,22 @@ namespace Spaceship_Demo
         {
             // assign y-value of each particle to the one in front of it
             for (int i = particles.Count - 1; i >= 0; i--) 
-            { 
-                Particle particle = particles[i];
-                Particle next = particles[i + 1];
-
-                particle.Y = next.Y;
-            }
-
-            // assign y-value of first particle to ship's y-value
-            particles[0].Y = pos.Y;
-
-            // rotate all particles
-            foreach (Particle particle in particles)
             {
-                particle.UpdateRot(MathF.PI/8);
+                // rotate all particles
+                particles[i].UpdateRot(MathF.PI / 32);
+
+                if (i > 0)
+                {
+                    Particle particle = particles[i];
+                    Particle next = particles[i - 1];
+
+                    particle.Y = next.Y;
+                }
+                else
+                {
+                    // assign y-value of first particle to ship's y-value
+                    particles[i].Y = pos.Y;
+                }
             }
         }
 
