@@ -74,7 +74,7 @@ namespace Spaceship_Demo
         public void Draw(SpriteBatch sb)
         {
             // draw ship
-            sb.Draw(shipTexture, pos, Color.White);
+            sb.Draw(shipTexture, pos - new Vector2(0, shipTexture.Height/2), Color.White);
 
             // draw trail
             for(int i = 0; i < particles.Count; i++)
@@ -126,7 +126,7 @@ namespace Spaceship_Demo
         { 
             // define start and end points
             Vector2 initial = pos;
-            Vector2 direction = new Vector2(-1, 0);
+            Vector2 direction = new Vector2(-trailLength, 0);
 
             // create particle list and every particle in the trail
             particles = new List<Particle>(particleCount);
@@ -134,7 +134,7 @@ namespace Spaceship_Demo
             {
                 // define position and rotation based on index
                 particles.Add(new Particle( 
-                    initial + (((i+1) / (particleCount - 1)) * direction), // P + tv, where t = i/(n-1)
+                    initial + (((i) / (particleCount - 1)) * direction), // P + tv, where t = i/(n-1)
                     MathF.PI * (i+1)/particleCount // pi radians * n/t
                     ));
             }

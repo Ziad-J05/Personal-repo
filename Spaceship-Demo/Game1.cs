@@ -35,11 +35,11 @@ namespace Spaceship_Demo
             Texture2D particleTexture = Content.Load<Texture2D>("trail particle");
 
             ship = new Spaceship(
-                new Vector2(200, 200),
+                new Vector2(300, 200),
                 0f,
                 shipTexture,
                 particleTexture,
-                50,
+                200,
                 10
                 );
         }
