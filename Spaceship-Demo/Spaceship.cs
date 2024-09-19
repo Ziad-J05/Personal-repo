@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace Spaceship_Demo
         private float drag;
         private Texture2D shipTexture;
         private Texture2D particleTexture;
-        private List<Particle> particles;
+        private List<Particle> trail1;
+        private List<Particle> trail2;
 
         private bool moveDir; // true is up
 
@@ -46,7 +48,10 @@ namespace Spaceship_Demo
             this.shipTexture = shipTexture;
             this.particleTexture = particleTexture;
             moveDir = true;
-            InitializeTrail(particleCount, trailLength);
+            trail1 = new List<Particle>();
+            trail2 = new List<Particle>();
+            InitializeTrail(trail1, particleCount, trailLength, true);
+            InitializeTrail(trail2, particleCount, trailLength, false);
         }
 
         // Methods
@@ -101,19 +106,32 @@ namespace Spaceship_Demo
             // draw ship
             sb.Draw(shipTexture, pos - new Vector2(0, shipTexture.Height/2), Color.White);
 
-            // draw trail
-            for(int i = 0; i < particles.Count; i++)
+            // draw trail1 and trail2
+            Particle particle;
+            for (int i = 0; i < trail1.Count; i++)
             {
-                Particle particle = particles[i];
+                particle = trail1[i];
                 sb.Draw(
                     particleTexture,
                     new Rectangle((int)particle.X, (int)particle.Y, particleTexture.Width, particleTexture.Height),
                     null,
-                    new Color(Color.White, (float)(particles.Count - i)/(float)particles.Count),
+                    new Color(Color.White, (float)(trail1.Count - i)/(float)trail1.Count),
                     particle.Rot,
                     new Vector2 (particleTexture.Width/2, particleTexture.Height/2),
                     SpriteEffects.None,
-                    (i/particles.Count)
+                    (i/trail1.Count)
+                    );
+
+                particle = trail2[i];
+                sb.Draw(
+                    particleTexture,
+                    new Rectangle((int)particle.X, (int)particle.Y, particleTexture.Width, particleTexture.Height),
+                    null,
+                    new Color(Color.White, (float)(trail2.Count - i) / (float)trail2.Count),
+                    particle.Rot,
+                    new Vector2(particleTexture.Width / 2, particleTexture.Height / 2),
+                    SpriteEffects.FlipHorizontally,
+                    (i / trail2.Count)
                     );
             }
         }
@@ -125,23 +143,33 @@ namespace Spaceship_Demo
         /// </summary>
         private void UpdateParticles()
         {
+            Particle particle;
+            Particle next;
+
             // assign y-value of each particle to the one in front of it
-            for (int i = particles.Count - 1; i >= 0; i--) 
+            for (int i = trail1.Count - 1; i >= 0; i--) 
             {
                 // rotate all particles
-                particles[i].UpdateRot(MathF.PI / 32);
+                trail1[i].UpdateRot(MathF.PI / 32);
+                trail2[i].UpdateRot(MathF.PI / 32 * -1);
 
                 if (i > 0)
                 {
-                    Particle particle = particles[i];
-                    Particle next = particles[i - 1];
+                    particle = trail1[i];
+                    next = trail1[i - 1];
+
+                    particle.Y = next.Y;
+
+                    particle = trail2[i];
+                    next = trail2[i - 1];
 
                     particle.Y = next.Y;
                 }
                 else
                 {
                     // assign y-value of first particle to ship's y-value
-                    particles[i].Y = pos.Y;
+                    trail1[i].Y = pos.Y;
+                    trail2[i].Y = pos.Y;
                 }
             }
         }
@@ -149,20 +177,30 @@ namespace Spaceship_Demo
         /// <summary>
         /// Instantiate every particle in the ship's trail and create a list to store them in
         /// </summary>
-        private void InitializeTrail(int particleCount, int trailLength) 
+        private void InitializeTrail(List<Particle> trail, int particleCount, int trailLength, bool isClockwise) 
         { 
             // define start and end points
             Vector2 initial = pos;
             Vector2 direction = new Vector2(-trailLength, 0);
 
-            // create particle list and every particle in the trail
-            particles = new List<Particle>(particleCount);
+            // set rotation direction
+            float rotDirection;
+            if (isClockwise) 
+            {
+                rotDirection = -1;
+            }
+            else
+            {
+                rotDirection = 1;
+            }
+
+            // create every particle in the trail
             for (float i = 0f; i < particleCount; i++)
             {
                 // define position and rotation based on index
-                particles.Add(new Particle( 
+                trail.Add(new Particle( 
                     initial + (((i) / (particleCount - 1)) * direction), // P + tv, where t = i/(n-1)
-                    MathF.PI * (i+1)/particleCount // pi radians * n/t
+                    MathF.PI * (i+1)/particleCount * rotDirection // pi radians * n/t
                     ));
             }
         }
