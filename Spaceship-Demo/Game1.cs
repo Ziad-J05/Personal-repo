@@ -38,7 +38,7 @@ namespace Spaceship_Demo
 
             ship = new Spaceship(
                 new Vector2(300, 200),
-                0.1f,
+                0.2f,
                 shipTexture,
                 particleTexture,
                 200,

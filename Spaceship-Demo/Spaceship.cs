@@ -13,7 +13,7 @@ namespace Spaceship_Demo
     {
         private Vector2 pos;
         private float yVelocity;
-        private float drag;
+        private float gravity;
         private Texture2D shipTexture;
         private Texture2D particleTexture;
         private List<Particle> trail1;
@@ -36,11 +36,11 @@ namespace Spaceship_Demo
         /// <param name="particleTexture"></param>
         /// <param name="trailLength"></param>
         /// <param name="particleCount"></param>
-        public Spaceship(Vector2 pos, float drag, Texture2D shipTexture, Texture2D particleTexture, int trailLength, int particleCount)
+        public Spaceship(Vector2 pos, float gravity, Texture2D shipTexture, Texture2D particleTexture, int trailLength, int particleCount)
         {
             this.pos = pos;
             yVelocity = 0f;
-            this.drag = drag;
+            this.gravity = gravity;
             this.shipTexture = shipTexture;
             this.particleTexture = particleTexture;
             moveDir = true;
@@ -58,40 +58,19 @@ namespace Spaceship_Demo
         /// <param name="kb"></param>
         public void Move(KeyboardState kb)
         {
-            // apply drag
-            if (yVelocity > 0)
-            {
-                yVelocity -= drag;
-            }
-            else
-            {
-                yVelocity = 0f;
-            }
-
             // reset ship velocity
-            if (kb.IsKeyDown(Keys.W))
+            if (kb.IsKeyDown(Keys.Space))
             {
-                yVelocity = 5;
+                yVelocity += 0.5f;
                 moveDir = true;
             }
-            if (kb.IsKeyDown(Keys.S))
-            {
-                yVelocity = 5;
-                moveDir = false;
-            }
 
-            // apply velocity
-            if (moveDir)
-            {
-                pos.Y -= yVelocity;
-            }
-            else
-            {
-                pos.Y += yVelocity;
-            }
+            pos.Y -= yVelocity;
 
             // update trail position
             UpdateParticles();
+
+            yVelocity -= gravity;
         }
 
         /// <summary>
