@@ -55,6 +55,7 @@ namespace Spaceship_Demo
             {
                 star.Pos += star.Velocity;
                 star.Velocity = Vector2.Multiply(star.Velocity, 1.1f);
+                star.Size *= 1.02f;
             }
         }
 
@@ -63,8 +64,8 @@ namespace Spaceship_Demo
             foreach(Star star in stars)
             {
                 sb.Draw(texture,
-                    new Rectangle((int)star.Pos.X + texture.Width / 2, (int)star.Pos.Y + texture.Height / 2, texture.Width, texture.Height),
-                    Color.White
+                    new Rectangle((int)star.Pos.X + texture.Width / 2, (int)star.Pos.Y + texture.Height / 2, (int)(texture.Width * star.Size), (int)(texture.Height * star.Size)),
+                    new Color(Color.White, Vector2.Distance(star.Pos, origin)/screen.Width) // sets transparency to percent of screen width star has traveled from origin
                     );
             }
         }

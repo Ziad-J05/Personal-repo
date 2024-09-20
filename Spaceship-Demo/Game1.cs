@@ -10,6 +10,7 @@ namespace Spaceship_Demo
         private SpriteBatch _spriteBatch;
 
         private Spaceship ship;
+        private StarRenderer starRenderer;
 
         public Game1()
         {
@@ -33,15 +34,21 @@ namespace Spaceship_Demo
 
             Texture2D shipTexture = Content.Load<Texture2D>("ship");
             Texture2D particleTexture = Content.Load<Texture2D>("trail particle");
+            Texture2D starTexture = Content.Load<Texture2D>("star");
 
             ship = new Spaceship(
-                new Vector2(400, 200),
+                new Vector2(300, 200),
                 0.1f,
                 shipTexture,
                 particleTexture,
-                380,
-                20
-                );
+                200,
+                20);
+
+            starRenderer = new StarRenderer(
+                new Vector2(700, 300),
+                _graphics.PreferredBackBufferWidth,
+                _graphics.PreferredBackBufferHeight,
+                starTexture);
         }
 
         protected override void Update(GameTime gameTime)
@@ -50,8 +57,13 @@ namespace Spaceship_Demo
                 Exit();
 
             // TODO: Add your update logic here
+
             KeyboardState keyboardState = Keyboard.GetState();
             ship.Move(keyboardState);
+
+            starRenderer.AddStars(4);
+            starRenderer.MoveStars();
+            starRenderer.DiscardStars();
                 
             base.Update(gameTime);
         }
@@ -62,7 +74,8 @@ namespace Spaceship_Demo
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            ship.Draw(_spriteBatch);
+            starRenderer.DrawStars(_spriteBatch);
+            ship.Draw(_spriteBatch);            
             _spriteBatch.End();
 
             base.Draw(gameTime);
