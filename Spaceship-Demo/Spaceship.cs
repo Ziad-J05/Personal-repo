@@ -56,7 +56,7 @@ namespace Spaceship_Demo
         /// Update position of the spaceship and its trail based on player input
         /// </summary>
         /// <param name="kb"></param>
-        public void Move(KeyboardState kb)
+        public void Move(KeyboardState kb, float screenHeight)
         {
             // reset ship velocity
             if (kb.IsKeyDown(Keys.Space))
@@ -67,10 +67,29 @@ namespace Spaceship_Demo
 
             pos.Y -= yVelocity;
 
+            ClampPosition(screenHeight);
+
             // update trail position
             UpdateParticles();
 
             yVelocity -= gravity;
+        }
+
+        private void ClampPosition(float maxY)
+        {
+            float halfHeight = (float)shipTexture.Height / 2f;
+
+            if (pos.Y < halfHeight)
+            {
+                pos.Y = halfHeight;
+                yVelocity = 0f;
+            }
+
+            if (pos.Y > (maxY - halfHeight)) 
+            { 
+                pos.Y = maxY - halfHeight;
+                yVelocity = 0f;
+            }
         }
 
         /// <summary>

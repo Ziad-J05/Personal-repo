@@ -59,7 +59,7 @@ namespace Spaceship_Demo
             // TODO: Add your update logic here
 
             KeyboardState keyboardState = Keyboard.GetState();
-            ship.Move(keyboardState);
+            ship.Move(keyboardState, _graphics.PreferredBackBufferHeight);
 
             starRenderer.AddStars(4);
             starRenderer.MoveStars();
