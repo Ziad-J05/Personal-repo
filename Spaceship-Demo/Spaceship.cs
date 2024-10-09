@@ -97,8 +97,18 @@ namespace Spaceship_Demo
         /// </summary>
         public void Draw(SpriteBatch sb)
         {
+            Rectangle shipRectangle = new Rectangle((int)pos.X, (int)pos.Y, shipTexture.Width, shipTexture.Height);
             // draw ship
-            sb.Draw(shipTexture, pos - new Vector2(0, shipTexture.Height/2), Color.White);
+            sb.Draw(
+                shipTexture,
+                shipRectangle,
+                null,
+                Color.White,
+                0f - (float)(Math.PI/64 * yVelocity),
+                new Vector2(0, shipTexture.Height/2),
+                SpriteEffects.None,
+                0f
+                );
 
             // draw trail1 and trail2
             Particle particle;

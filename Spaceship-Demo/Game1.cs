@@ -23,7 +23,12 @@ namespace Spaceship_Demo
         {
             // TODO: Add your initialization logic here
 
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.ApplyChanges();
+
             base.Initialize();
+            
         }
 
         protected override void LoadContent()
@@ -37,7 +42,7 @@ namespace Spaceship_Demo
             Texture2D starTexture = Content.Load<Texture2D>("star");
 
             ship = new Spaceship(
-                new Vector2(300, 200),
+                new Vector2(_graphics.PreferredBackBufferWidth * 1/5, _graphics.PreferredBackBufferHeight / 2),
                 0.2f,
                 shipTexture,
                 particleTexture,
@@ -45,7 +50,7 @@ namespace Spaceship_Demo
                 20);
 
             starRenderer = new StarRenderer(
-                new Vector2(700, 300),
+                new Vector2(_graphics.PreferredBackBufferWidth * 4/5, _graphics.PreferredBackBufferHeight/2),
                 _graphics.PreferredBackBufferWidth,
                 _graphics.PreferredBackBufferHeight,
                 starTexture);
